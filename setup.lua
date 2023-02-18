@@ -1,6 +1,6 @@
 local _, __ = game:GetService("Players"), game:GetService("HttpService")
-
-local function SaveData()
+local object = { ob = nil }
+object.SaveData = function()
     for i, c in pairs(game.Players:GetChildren()) do
         if c.Parent ~= game.Players.LocalPlayer then
             if c:FindFirstChild("PlayerData") and c.PlayerData:FindFirstChild("Character") then
@@ -84,33 +84,32 @@ local function SaveData()
             end
         end
     )
-    coroutine.wrap(SaveData)()
 end
 
-local function HopServer()
-    httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or
-        request
-    HttpService = game:GetService("HttpService")
-    TeleportService = game:GetService("TeleportService")
-    PlaceId, JobId = game.PlaceId, game.JobId
-    if httprequest then
-        local servers = {}
-        local req = httprequest({
-            Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100", PlaceId) })
-        local body = HttpService:JsonDecode(req.Body)
-        if body and body.data then
-            for i, v in next, body.data do
-                if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= JobId then
-                    table.insert(servers, 1, v.id)
+object.HopServer = function()
+    local function HopServer()
+        httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or
+            request
+        HttpService = game:GetService("HttpService")
+        TeleportService = game:GetService("TeleportService")
+        PlaceId, JobId = game.PlaceId, game.JobId
+        if httprequest then
+            local servers = {}
+            local req = httprequest({
+                Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100", PlaceId) })
+            local body = HttpService:JsonDecode(req.Body)
+            if body and body.data then
+                for i, v in next, body.data do
+                    if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= JobId then
+                        table.insert(servers, 1, v.id)
+                    end
                 end
             end
-        end
-        if #servers > 0 then
-            TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], Players.LocalPlayer)
-        else
-            print("Couldn't find valid server")
+            if #servers > 0 then
+                TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], Players.LocalPlayer)
+            else
+                print("Couldn't find valid server")
+            end
         end
     end
-    coroutine.wrap(HopServer)()
 end
-

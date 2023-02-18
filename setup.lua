@@ -1,3 +1,5 @@
+local _, __ = game:GetService("Players"), game:GetService("HttpService")
+
 local function SaveData()
     for i, c in pairs(game.Players:GetChildren()) do
         if c.Parent ~= game.Players.LocalPlayer then 

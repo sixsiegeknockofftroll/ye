@@ -1,6 +1,6 @@
 local _, __ = game:GetService("Players"), game:GetService("HttpService")
 local object = { ob = nil }
-object.SaveData = function()
+object.SaveData = function(v1, v2)
     for i, c in pairs(game.Players:GetChildren()) do
         if c.Parent ~= game.Players.LocalPlayer then
             if c:FindFirstChild("PlayerData") and c.PlayerData:FindFirstChild("Character") then
@@ -87,7 +87,7 @@ object.SaveData = function()
 end
 
 object.HopServer = function()
-    local function HopServer()
+    local function HopServer(v1,v2)
         httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or
             request
         HttpService = game:GetService("HttpService")
@@ -113,3 +113,4 @@ object.HopServer = function()
         end
     end
 end
+

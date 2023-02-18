@@ -113,4 +113,4 @@ object.HopServer = function()
         end
     end
 end
-
+return object
